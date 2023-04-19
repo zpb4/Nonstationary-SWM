@@ -11,7 +11,8 @@ Raw data to support this code in in the following Zenodo repository: https://doi
 Requires following R packages:
 * ranger
 * fGarch
-*doParallel
+* doParallel
+* optimx
 ### Executing program
 The workflow below is configured to run from the file configuration when the Zenodo repository is unzipped and stored in a repository named 'data'
 #### Hybrid SWM fitting
