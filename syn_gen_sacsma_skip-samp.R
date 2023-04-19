@@ -14,12 +14,11 @@ print(my.cluster)
 doParallel::registerDoParallel(cl = my.cluster)
 foreach::getDoParRegistered()
 
-n<-100
+n<-1000
 
 err_hist<-readRDS('fit/err_hist_sacsma.rds')
 
 predictor_mat_hist<-readRDS('fit/predictor_mat_hist_sacsma.rds')
-predictor_mat_4c<-readRDS('fit/predictor_mat_4c_sacsma.rds')
 
 rg_db<-readRDS('fit/rf_corr_sacsma_cal_skip-samp_def.rds')
 
@@ -57,19 +56,17 @@ for(i in 1:length(seq_tst)){
 }
 
 #-------------------------------------------------------------------------------
-#val
-idx<-idx_tst
-
-db_err<-predict(rg_db,data=predictor_mat_hist[idx,])$predictions
-err_db<-err_hist[idx]-db_err
+#generate
+db_err<-predict(rg_db,data=predictor_mat_hist)$predictions
+err_db<-err_hist-db_err
 
 source('GL_maineqs_mv.R')
 gl_fit<-readRDS('fit/sacsma-resid-fit_mv-lin-ar_val_skip-samp_def.rds')
 
 sc_factor<-readRDS('fit/sacsma_sc_factor_val_skip-samp.rds')
-sc_factor<-matrix(rep(sc_factor,length(idx)),ncol=11,byrow=T)
+sc_factor<-matrix(rep(sc_factor,length(ix)),ncol=11,byrow=T)
 
-pred_in<-predictor_mat_hist[idx,1:11]
+pred_in<-predictor_mat_hist[,1:11]
 pred_scale_in<-pred_in/sc_factor
 pred_scale<-pred_scale_in
 
@@ -82,9 +79,9 @@ syn_out<-foreach(m = 1:n,.combine='cbind',.packages=c('fGarch','ranger'),.inorde
   
   syn_res<-syn_gen_mv_ar1_lin(gl_fit,sig_var=pred_scale,beta_var=pred_scale,xi_var=pred_scale,phi_var=pred_scale,et=err_db)
   
-  syn_gen<-rep(0,(length(idx)+3));syn_gen[1:3]<-sample(syn_res,3)
+  syn_gen<-rep(0,(length(ix)+3));syn_gen[1:3]<-sample(syn_res,3)
 
-  vmat<-predictor_mat_hist[idx,]
+  vmat<-predictor_mat_hist
 
   for(i in 4:length(syn_gen)){
     dat<-predictor_mat_hist[1:2,]
@@ -96,13 +93,13 @@ syn_out<-foreach(m = 1:n,.combine='cbind',.packages=c('fGarch','ranger'),.inorde
   return(syn_gen[4:length(syn_gen)])
 }
 
-saveRDS(syn_out,'out/sacsma_skip-samp_tst_gl-sep-mv-lin-ar_syn-error_default.rds')
+saveRDS(syn_out,'out/sacsma_skip-samp_gl-sep-mv-lin-ar_syn-error_default.rds')
 
-sim<-matrix(rep(predictor_mat_hist[idx,1],n),ncol=n,byrow=F)
+sim<-matrix(rep(predictor_mat_hist[,1],n),ncol=n,byrow=F)
 swm_out<-sim+syn_out
 swm_out[swm_out<0]<-0
 
-saveRDS(swm_out,'out/sacsma_skip-samp_tst_gl-sep-mv-lin-ar_syn-flow_default.rds')
+saveRDS(swm_out,'out/sacsma_skip-samp_gl-sep-mv-lin-ar_syn-flow_default.rds')
 
 print(paste('end',Sys.time()))
 
