@@ -11,6 +11,7 @@ Raw data to support this code in in the following Zenodo repository: https://doi
 Requires following R packages:
 * ranger
 * fGarch
+*doParallel
 ### Executing program
 The workflow below is configured to run from the file configuration when the Zenodo repository is unzipped and stored in a repository named 'data'
 #### Hybrid SWM fitting
@@ -21,26 +22,22 @@ Runtimes (in parentheses at end) are estimated with parallelization where applic
 2) data_procss_sacsma.R: Processes raw hydrologic and state variable data for SAC-SMA 'truth' model from .txt files in data repository (<1 min)
 3) hymod_error_pre-process: Data pre-processing routine for HYMOD data (<1 min)
 4) sacsma_error_pre-process: Data pre-processing routine for SAC-SMA data (<1 min)
-5) fit_model_hymod_cal-val.R: Fits hybrid SWM model to calibration-validation subsets of training data for HYMOD (<1 min)
-6) lamc_synthetic-gen_hc.R: Generates specified number of synthetic ensemble samples saved in 'out' repository (6 hrs per 100 samples)
-7) error_check-remove_hc.R: Synthetic ensemble post-processing script to remove/replace errant members (10 min per 100 samples)
-8) syn-hefs_py-transfer_feather.R: Transfers R array ensemble output to .feather files for compatibility with Python (30 min per 100 samples)
-9) ens_sample_npz-transfer.py: Arranges .feather files to Numpy array and zips individual synthetic ensembles for compatibility with EFO model (30 min per 100 samples)
+5) fit_model_hymod_cal-val.R: Fits hybrid SWM model to calibration-validation subsets of training data for HYMOD (5 min)
+6) fit_model_hymod_cal-val_benchmark.R: Fits static SWM model to calibration-validation subsets of training data for HYMOD (<1 min)
+7) fit_model_sacsma_cal-val_skip-samp.R: Fits hybrid SWM model to calibration-validation subsets of training data for SAC-SMA for 'skip-sample' approach outlined in manuscript (5 min)
+7) fit_model_sacsma_cal-val_skip-samp.R: Fits hybrid SWM model to calibration-validation subsets of training data for SAC-SMA for 'split-sample' approach outlined in manuscript (5 min)
 
 #### Hybrid SWM generation
 
-1) lamc_synthetic-gen_pre-hc.R: Generates specified number of pre-hindcast synthetic ensemble samples saved in 'out' repository (6 hrs per 100 samples)
-2) error_check-remove_pre-hc.R: Synthetic ensemble post-processing script to remove/replace errant members, pre-hindcast period (10 min)
-3) syn-hefs_py-transfer_feather_pre-hc.R: Transfers R array ensemble output to .feather files for compatibility with Python
-4) ens_sample_npz-transfer.py: Arranges .feather files to Numpy array and zips individual synthetic ensembles for compatibility with EFO model
+1) syn_gen_hymod_tst.R: Generates specified number of hybrid SWM samples for HYMOD in Test scenario; saved in 'out' repository (1 hr per 1000 samples)
+2) syn_gen_hymod_4c.R: Generates specified number of hybrid SWM samples for HYMOD in Test+4C scenario; saved in 'out' repository (1 hr per 1000 samples)
+3) syn_gen_sacsma_skip-samp.R: Generates specified number of hybrid SWM samples for SAC-SMA in with 'skip-sample' approach; saved in 'out' repository (1 hr per 1000 samples)
+4) syn_gen_sacsma_split-samp.R: Generates specified number of hybrid SWM samples for SAC-SMA in with 'split-sample' approach; saved in 'out' repository (1 hr per 1000 samples)
 
 #### Functions
-As above but for out-of-sample pre-hindcast generation
 
-1) lamc_synthetic-gen_pre-hc.R: Generates specified number of pre-hindcast synthetic ensemble samples saved in 'out' repository (6 hrs per 100 samples)
-2) error_check-remove_pre-hc.R: Synthetic ensemble post-processing script to remove/replace errant members, pre-hindcast period (10 min)
-3) syn-hefs_py-transfer_feather_pre-hc.R: Transfers R array ensemble output to .feather files for compatibility with Python
-4) ens_sample_npz-transfer.py: Arranges .feather files to Numpy array and zips individual synthetic ensembles for compatibility with EFO model
+1) GL_maineqs_mv.R: Required functions to support fitting and generation from dynamic residual model
+2) GL_subeqs.R: Subequations for 'GL_maineqs_mv.R'
 
 #### Plotting routines
 
