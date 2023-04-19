@@ -1,9 +1,6 @@
 #Process and arrange data into labeled matrices
 
-setwd('z:/oro_nonstat/')
-library(fGarch)
-library(ranger)
-library(corrplot)
+setwd('d:/Nonstationary-SWM/')
 
 ix<-seq(as.Date('1987-10-01'),as.Date('2013-09-30'),'day')
 ix2<-as.POSIXlt(ix)
@@ -12,10 +9,10 @@ idx_cal<-which(ix=='1987-10-01'):which(ix=='1997-09-30')
 idx_val<-which(ix=='1997-10-01'):which(ix=='2003-09-30')
 
 #simulation data
-sma_hist<-read.table('data/4c_warming/simflow_sacsma_ORO.txt')
-hym_hist<-read.table('data/4c_warming/simflow_hymod_ORO.txt')
-sma_4c<-read.table('data/4c_warming/simflow_sacsma_ORO_4C.txt')
-hym_4c<-read.table('data/4c_warming/simflow_hymod_ORO_4C.txt')
+sma_hist<-read.table('data/simflow_sacsma_ORO.txt')
+hym_hist<-read.table('data/simflow_hymod_ORO.txt')
+sma_4c<-read.table('data/simflow_sacsma_ORO_4C.txt')
+hym_4c<-read.table('data/simflow_hymod_ORO_4C.txt')
 
 #define errors
 err_hist<-sma_hist[,4]-hym_hist[,4]
@@ -47,7 +44,7 @@ lsoil_hist<-addvars_hist[,9]
 
 #4c state variables
 idx4<-which(ix=='2003-10-01'):which(ix=='2013-09-30')
-meteo_4c<-read.table('data/4c_warming/hymod_pr_tas_sm_et_swe_ORO.txt')
+meteo_4c<-read.table('data/hymod_pr_tas_sm_et_swe_ORO.txt')
 
 precip_4c<-meteo_4c[idx4,4]
 tavg_4c<- meteo_4c[idx4,5]
@@ -56,7 +53,7 @@ et_4c<-meteo_4c[idx4,7]
 sm_4c<-meteo_4c[idx4,6]
 
 #4c output variables
-addvars_4c<-read.table('data/4c_warming/simvars_hymod_ORO_4C.txt')
+addvars_4c<-read.table('data/simvars_hymod_ORO_4C.txt')
 roff_4c<-addvars_4c[idx4,5]
 bflow_4c<-addvars_4c[idx4,6]
 swe_4c<-addvars_4c[idx4,7]

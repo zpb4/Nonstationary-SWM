@@ -1,6 +1,6 @@
 #Process and arrange data into labeled matrices
 
-setwd('z:/oro_nonstat/')
+setwd('d:/Nonstationary-SWM/')
 
 ix<-seq(as.Date('1987-10-01'),as.Date('2013-09-30'),'day')
 ix2<-as.POSIXlt(ix)
@@ -11,15 +11,12 @@ ixx_obs<-as.POSIXlt(ix_obs)
 idx_hist<-which(ix_obs=='1987-10-01'):which(ix_obs=='2013-09-30')
 
 #simulation data
-sma_hist<-read.table('data/4c_warming/simflow_sacsma_ORO.txt')
+sma_hist<-read.table('data/simflow_sacsma_ORO.txt')
 oro_obs<-read.table('data/FNF_ORO_mm.txt')
-sma_4c<-read.table('data/4c_warming/simflow_sacsma_ORO_4C.txt')
+sma_4c<-read.table('data/simflow_sacsma_ORO_4C.txt')
 
 obs<-oro_obs[idx_hist,4]
 obs[obs<0]<-0
-
-plot(1:365,obs[1:365],type='l')
-lines(1:365,sma_hist[1:365,4],col='red')
 
 #define errors
 err_hist<-obs-sma_hist[,4]
@@ -48,7 +45,7 @@ store_hist<-addvars_hist[,10]
 
 #4c state variables
 idx4<-which(ix=='2003-10-01'):which(ix=='2013-09-30')
-meteo_4c<-read.table('data/4c_warming/sacsma_pr_tas_sm_et_swe_ORO.txt')
+meteo_4c<-read.table('data/sacsma_pr_tas_sm_et_swe_ORO.txt')
 
 precip_4c<-meteo_4c[idx4,4]
 tavg_4c<- meteo_4c[idx4,5]
@@ -57,7 +54,7 @@ et_4c<-meteo_4c[idx4,7]
 sm_4c<-meteo_4c[idx4,6]
 
 #4c output variables
-addvars_4c<-read.table('data/4c_warming/simvars_sacsma_ORO_4C.txt')
+addvars_4c<-read.table('data/simvars_sacsma_ORO_4C.txt')
 roff_4c<-addvars_4c[idx4,5]
 bflow_4c<-addvars_4c[idx4,6]
 swe_4c<-addvars_4c[idx4,7]
