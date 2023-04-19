@@ -1,5 +1,5 @@
 # Nonstationary-SWM
-Code repository to support WRR manuscript 'A hybrid, non-stationary Stochastic Watershed Model (SWM) for uncertain hydrologic projections under climate change' 
+Code repository to support WRR manuscript 'A hybrid, non-stationary Stochastic Watershed Model (SWM) for uncertain hydrologic projections under climate change'   
 Submitted 4 April 2023
 
 ## Description
