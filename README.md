@@ -43,8 +43,6 @@ Runtimes (in parentheses at end) are estimated with parallelization where applic
 #### Plotting routines
 
 - main_plot.R: Main plotting script for manuscript figures
-- calc_ensemble_stats_top-10.R: Calculates cumulative ensemble statistics for top-10 inflow events
-- calc_ensemble_stats_top-100.R: Calculates cumulative ensemble statistics for top-10 inflow events
 
 #### Miscellaneous
 
