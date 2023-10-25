@@ -1,5 +1,5 @@
 #fit model between hymod and sacsma
-setwd('z:/oro_nonstat/')
+setwd('d:/Nonstationary-SWM/')
 
 var_mat_hist<-readRDS('data/var_mat_hist.rds')
 var_mat_4c<-readRDS('data/var_mat_4c.rds')

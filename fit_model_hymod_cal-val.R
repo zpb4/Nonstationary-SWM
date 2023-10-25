@@ -1,8 +1,10 @@
 #fit model between hymod and sacsma
-setwd('z:/oro_nonstat/')
+setwd('d:/Nonstationary-SWM/')
 library(fGarch)
 library(ranger)
 library(optimx)
+
+print(paste('start',Sys.time()))
 
 var_mat_hist<-readRDS('data/var_mat_hist.rds')
 var_mat_4c<-readRDS('data/var_mat_4c.rds')
@@ -24,17 +26,16 @@ idx_val<-which(ix=='1997-10-01'):which(ix=='2003-09-30')
 idx_4c<-which(ix=='2003-10-01'):which(ix=='2013-09-30')
 
 #fit RF model for error correction
-#fit RF model for error correction
 predictor_mat_hist<-readRDS('fit/predictor_mat_hist.rds')
 predictor_mat_4c<-readRDS('fit/predictor_mat_4c.rds')
 
 err_hist<-readRDS('fit/err_hist.rds')
 err_4c<-readRDS('fit/err_4c.rds')
 
-rg_db_def<-ranger(x=predictor_mat_hist[idx_cal,],y=sm_err_vec,classification = F,
+rg_db<-ranger(x=predictor_mat_hist[idx_cal,],y=err_hist[idx_cal],classification = F,
                   replace=T,importance = 'impurity',splitrule = 'variance',quantreg = F)
 
-saveRDS(rg_db_def,'fit/rf_corr_hymod_cal_87_97_default.rds')
+saveRDS(rg_db,'fit/rf_corr_hymod_cal_87_97_default.rds')
 
 #GL-SEP model for residuals
 db_cal<-predict(rg_db,data=predictor_mat_hist[idx_cal,])$predictions
@@ -56,7 +57,7 @@ for(k in 1:10){
 
 #scaling factor calibration
 pred_scale_c<-scale(predictor_mat_hist[idx_cal,1:10],center=F)
-sc_est<-predictor_mat_hist[idx_val,1:10]/pred_scale_c
+sc_est<-predictor_mat_hist[idx_cal,1:10]/pred_scale_c
 sc_factor<-apply(sc_est,2,function(x){mean(x,na.rm=T)})
 saveRDS(sc_factor,'fit/sc_factor_cal.rds')
 
@@ -94,6 +95,8 @@ start<-as.vector(st_arr)
 lb<-as.vector(lb_arr)
 ub<-as.vector(ub_arr)
 
+set.seed(83) 
+
 gl_mle_val<-optimx(par=start,fn=GL_fun_mv_ar1_lin,sig_var=pred_scale_val,beta_var=pred_scale_val,xi_var=pred_scale_val,phi_var=pred_scale_val,et=err_db_val,
     lower = lb,upper = ub,method = 'Rvmmin',
     control = list(maximize=T,all.methods=F,maxit=10000))
@@ -109,7 +112,7 @@ gl_mle_val$value
 par_val<-c()
 
 for(i in 1:44){
-  par_val[i]<-gl_mle_val[[i]][5]
+  par_val[i]<-gl_mle_val[[i]]
 }
 par_val
 
@@ -119,7 +122,7 @@ GL_fun_mv_ar1_lin(par_val,sig_var=pred_scale_val,beta_var=pred_scale_val,xi_var=
 par_cal<-c()
 
 for(i in 1:44){
-  par_cal[i]<-gl_mle_cal[[i]][1]
+  par_cal[i]<-gl_mle_cal[[i]]
 }
 
 par_cal
@@ -128,6 +131,8 @@ GL_fun_mv_ar1_lin(par_cal,sig_var=pred_scale_cal,beta_var=pred_scale_cal,xi_var=
 
 saveRDS(par_val,'fit/hymod-resid-fit_mv-lin-ar_val_default.rds')
 saveRDS(par_cal,'fit/hymod-resid-fit_mv-lin-ar_cal_default.rds')
+
+print(paste('end',Sys.time()))
 
 rm(list=ls());gc()
 
