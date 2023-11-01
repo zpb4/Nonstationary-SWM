@@ -6,7 +6,7 @@ Submitted 4 April 2023
 The code below supports the data processing, model fitting, generation, and plotting routines to support the aforementioned manuscript.
 ## Getting started
 ### Dependencies
-Raw data to support this code in in the following Zenodo repository: https://doi.org/10.5281/zenodo.7689054
+Releases of this code are stored in the following Zenodo repository: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7702354.svg)](https://doi.org/10.5281/zenodo.7702354)
 ### Installing
 Requires following R packages:
 * ranger
