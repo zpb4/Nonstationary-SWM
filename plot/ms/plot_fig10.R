@@ -1,5 +1,6 @@
 setwd('z:/oro_nonstat/')
 source('mm-cfs_conversion.R')
+library(scales)
 
 hym_site<-'ORO'
 gen_period1<-'hist-all'
@@ -20,8 +21,8 @@ noise_reg=T
 #'5wet': c(2005,2006,2011,2016,2017)
 #'5dry': c(2007,2008,2012,2014,2015)
 #'tst-all' : 2005:2018
-wy_comp<-c(2007,2008,2012,2014,2015)
-wy_tag<-'5dry'
+wy_comp<-c(2005,2006,2011,2016,2017)
+wy_tag<-'5wet'
 
 hym_kcfs_conv<-as.numeric(area_calc[hym_site,2])*mm_to_cfs/1000
 
@@ -55,8 +56,9 @@ syn_tst_err_hybrid<-syn_tst_err_hyb[idx_comp,]*hym_kcfs_conv
 syn_4c_err_hybrid<-syn_4c_err_hyb[idx_comp,]*hym_kcfs_conv
 #--------------------------------------------------------------
 #plot raw errors vs corrected errors
-png(paste('h:/oroville_non-stationary/paper/figs_rev1/fig10/fig10_',wy_tag,'_v-',vers,'_nreg=',noise_reg,'.png',sep=''),width=768,height=640)
+png(paste('h:/Projects/Nonstationary SWM/oroville_non-stationary/paper/figs_rev1/fig10/fig10_',wy_tag,'_v-',vers,'_nreg=',noise_reg,'.png',sep=''),width=768,height=640)
 par(mfrow=c(2,2),oma=c(1,2,2,0),mar=c(0.5,1.5,0.5,0.5),mgp=c(2,0.5,0),tcl=-0.2,cex.lab=2,cex.axis=1.75)
+my.gray = alpha('gray50',alpha=0.5)
 
 #a) hybrid test
 err_lst<-vector('list',24)
@@ -89,7 +91,7 @@ axis(1,at=seq(1.12,12.12,1),labels = F)
 axis(2,at=seq(-5,5,2.5),labels = seq(-5,5,2.5) )
 box(which='plot')
 #legend('topright',c('Empirical','Simulated'),lwd=c(6,6),col=c('skyblue4','turquoise3'),cex=2)
-abline(h=0,lty=2,col='red')
+abline(h=0,lty=2,col=my.gray)
 text(11,-4.5,'a)',cex=3,font=2,adj=0)
 mtext('Error (kcfs)',side=2,line=2,cex=1.75)
 mtext('Hybrid SWM',side=3, line=.5,cex=2,font=2)
@@ -122,7 +124,7 @@ axis(1,at=seq(1.12,12.12,1),labels = F)
 axis(2,at=seq(-5,5,2.5),labels = F)#seq(-1,1,0.5) )
 box(which='plot')
 legend(6.5,5.5,c('empirical','simulated'),lwd=c(6,6),col=c('skyblue4','turquoise3'),cex=2,bty='n')
-abline(h=0,lty=2,col='red')
+abline(h=0,lty=2,col=my.gray)
 text(11,-4.5,'c)',cex=3,font=2,adj=0)
 mtext('Static SWM',side=3,line=.5,cex=2,font=2)
 
@@ -155,7 +157,7 @@ axis(1,at=seq(1.12,12.12,1),labels = mths)
 axis(2,at=seq(-5,5,2.5),labels = seq(-5,5,2.5) )
 box(which='plot')
 #legend('topright',c('Empirical','Simulated'),lwd=c(6,6),col=c('darkorange3','coral1'),cex=2)
-abline(h=0,lty=2,col='red')
+abline(h=0,lty=2,col=my.gray)
 text(11,-4.5,'b)',cex=3,font=2,adj=0)
 mtext('Error (kcfs)',side=2,line=2,cex=1.75)
 
@@ -188,7 +190,7 @@ axis(1,at=seq(1.12,12.12,1),labels = mths)
 axis(2,at=seq(-5,5,2.5),labels = F)#seq(-1,1,0.5) )
 box(which='plot')
 legend(6.5,5.5,c('empirical','simulated'),lwd=c(6,6),col=c('darkorange3','coral1'),cex=2,bty='n')
-abline(h=0,lty=2,col='red')
+abline(h=0,lty=2,col=my.gray)
 text(11,-4.5,'d)',cex=3,font=2,adj=0)
 
 dev.off()

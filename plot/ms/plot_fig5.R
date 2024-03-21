@@ -5,13 +5,13 @@ source('mm-cfs_conversion.R')
 hym_site<-'ORO'
 sma_site<-'ORO'
 #specifications
-vers<-'sim13' 
+vers<-'err13' 
 # 'err13' - SV + lag1:3 errors
 # 'sim13' - SV + lag1:3 sim
 # 'err_sim13' - SV + lag1:3 errors and sim
 # 'err13_llag' - SV + lag1:3 errors and long lagged variables
 # 'all' - all SV (including lag 1:3 terms) and long lagged variables
-noise_reg=F
+noise_reg=T
 
 if(noise_reg==F){
   ll_vec<-readRDS(paste('fit_rev1/hymod_llvec_v-',vers,'.rds',sep=''))
@@ -79,7 +79,7 @@ rf_err_corr<-readRDS(paste('fit_rev1/hymod_rf-err-corr_cal_',hym_site,'_v-',vers
 
 #--------------------------------------------------------------
 #plot raw errors vs corrected errors
-png(paste('h:/oroville_non-stationary/paper/figs_rev1/fig5/fig5_',wy_tag,'_v-',vers,'_nreg=',noise_reg,'.png',sep=''),width=768,height=900)
+png(paste('h:/Projects/Nonstationary SWM//oroville_non-stationary/paper/figs_rev1/fig5/fig5_',wy_tag,'_v-',vers,'_nreg=',noise_reg,'.png',sep=''),width=768,height=900)
 par(mfrow=c(2,1),mar=c(1,4,1,1),mgp=c(2,0.5,0),tcl=-0.2,cex.lab=2,cex.axis=1.75)
 
 err_hist<-hym_predmat_hist[idx_comp,'err 0']
@@ -105,7 +105,7 @@ boxplot(err_lst,
         boxwex = rep(c(.3,.2),12),
         notch = F,
         col = rep(c('skyblue4','skyblue'),12),
-        ylim = c(-5,5),
+        ylim = c(-7.5,5),
         xlim = c(1,12.2),
         xlab='',
         ylab='Error (kcfs)',
@@ -113,12 +113,12 @@ boxplot(err_lst,
         axes=F
 )
 axis(1,at=seq(1.12,12.12,1),labels = F)
-axis(2,at=seq(-5,5,2.5),labels = seq(-5,5,2.5) )
+axis(2,at=seq(-7.5,5,2.5),labels = seq(-7.5,5,2.5) )
 box(which='plot')
 legend('topright',c('Raw','RF-corrected'),lwd=c(6,6),col=c('skyblue4','skyblue'),cex=2,bty='n')
 abline(h=0,lty=2,col='red')
 text(0.75,4.75,'a)',cex=3,font=2,adj=0)
-text(11,-4.75,wy_tag,cex=3,font=2,adj=0)
+text(6,-7,wy_tag,cex=3,font=2,adj=0)
 
 par(mar=c(2,4,0,1))
 
@@ -148,7 +148,7 @@ boxplot(err_lst,
         boxwex = rep(c(.3,.2),12),
         notch = F,
         col = rep(c('darkorange3','goldenrod1'),12),
-        ylim = c(-5,5),
+        ylim = c(-7.5,5),
         xlim = c(1,12.2),
         xlab='',
         ylab='Error (kcfs)',
@@ -156,12 +156,26 @@ boxplot(err_lst,
         axes=F
 )
 axis(1,at=seq(1.12,12.12,1),labels = mths)
-axis(2,at=seq(-5,5,2.5),labels = seq(-5,5,2.5) )
+axis(2,at=seq(-7.5,5,2.5),labels = seq(-7.5,5,2.5) )
 box(which='plot')
 legend('topright',c('Raw','RF-corrected'),lwd=c(6,6),col=c('darkorange3','goldenrod1'),cex=2,bty='n')
 abline(h=0,lty=2,col='red')
 text(.75,4.75,'b)',cex=3,font=2,adj=0)
-text(11,-4.75,wy_tag,cex=3,font=2,adj=0)
+text(6,-7,wy_tag,cex=3,font=2,adj=0)
+
+par(fig=c(.7,.95,.525,.725),mar=c(1,1,0,0),mgp=c(0,-1.25,0),cex.axis=1.25,cex.lab=1.5,tcl=0.1,new=TRUE)
+plot(err_hist,db_err,xlim=c(-6,6),ylim=c(-6,6),xlab='raw error',ylab='RF error',axes=F)
+abline(0,1,lty=2,col='gray')
+axis(1,at=seq(-10,10,5),labels = seq(-10,10,5))
+axis(2,at=seq(-10,10,5),labels = seq(-10,10,5))
+box(which = 'plot')
+
+par(fig=c(.7,.95,.035,.235),mar=c(1,1,0,0),mgp=c(0,-1.25,0),cex.axis=1.25,cex.lab=1.5,tcl=0.1,new=TRUE)
+plot(err_4c,db_err_4c,xlim=c(-6,6),ylim=c(-6,6),xlab='raw error',ylab='RF error',axes=F)
+abline(0,1,lty=2,col='gray')
+axis(1,at=seq(-10,10,5),labels = seq(-10,10,5))
+axis(2,at=seq(-10,10,5),labels = seq(-10,10,5))
+box(which = 'plot')
 
 dev.off()
 
