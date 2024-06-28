@@ -103,7 +103,7 @@ db_val<-predict(rf_err_corr,data=rf_pred[idx_val,])$predictions
 err_db_val<-rf_err[idx_val]-db_val
 
 #see GL_maineqs and GL_subeqs code for more details
-source('GL_maineqs_rev1.R')
+source('GL_maineqs.R')
 
 #define lower bound for sigma intercept
 srt_err<-sort(abs(err_db_val))
